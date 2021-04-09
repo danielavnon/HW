@@ -1,0 +1,18 @@
+section 1
+in a case of a mere 25 players to assess
+ we would reckon it'll take less time to have the assessment done manually, rather than having the script being written
+otherwise, in cases in which there are many more players to check
+surely we would prefer to trust an automated check
+we believe it would have taken us less than 5 mins to check all 25 players
+ 
+section 2
+A first and a prompt conclusion is we had lacked sufficient skills for this task
+another conclusion we suppose bash could easily enable executing of complicated programmes
+Additional application of bash scripts may include complex searching of pre specified field within databases, in the like of 'google'
+ 
+section 3
+obviously you could execute this script once every hour manually
+you could set an automated clock which executes this script as well
+we believe it would be necessary to execute this script even thought it may have been executed before
+the reason is the times the specified searched field may has appeared may change
+even if the player had been checked before
