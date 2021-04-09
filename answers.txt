@@ -13,6 +13,6 @@ Additional application of bash scripts may include complex searching of pre spec
 section 3
 obviously you could execute this script once every hour manually
 you could set an automated clock which executes this script as well
-we believe it would be necessary to execute this script even thought it may have been executed before
+we believe it would be necessary to execute this script even though it may have been executed before
 the reason is the times the specified searched field may has appeared may change
 even if the player had been checked before
