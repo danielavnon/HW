@@ -12,9 +12,8 @@
 #(line: 9) searching in 'overview' how many times 'Midfielder' appeared
 #(line: 10) omitting players which did not match 'Midfielder' requirement
 #(line: 11) concatenates given string and search result for each matching link
-#(line: 13) deleting 'overview' file to ensure next iteration of line 11 execution
+#(line: 13) deleting 'overview' file to ensure next iteration of line 11
 #(line: 13) continue: will result in an iterated 'overview' file
-#(line: 15) printing the desired output file
 
 wget https://www.premierleague.com/players
 grep -oP "(/players/)[0-9]+/[a-zA-Z-]+(/overview)" players > urls.txt
@@ -30,6 +29,5 @@ do
 	fi
 	rm overview
 done
-cat Results.csv
 rm players
 rm urls.txt
