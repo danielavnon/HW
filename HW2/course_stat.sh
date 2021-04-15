@@ -2,7 +2,8 @@
 #script name: course_stat.sh
 #(lines 1-9) check feasible input
 #(lines 10-16) create a new folder named as specified and feed it grades file
-#(lines 17-22) run the C compiled executable on the grades file, create analysis file
+#(lines 17-18) compile C file and move executable file into new folder
+#(lines 19-22) move into new folder and run executable file onto grades file
 
 if [[ $# != 1 ]]; then
 	echo "Wrong number of arguments" 1>&2
