@@ -36,12 +36,6 @@
  * @param outout_file contains the anaylis, formatted as demanded
  * @return Non-zero value in case of an error
  */
-/**
- * 
- * 
- * 
- * 
- */
 int main(int argc, char *argv[]) {
 	if (argc < 1) {
 		fprintf(stderr, "Error\n");
@@ -82,9 +76,21 @@ int main(int argc, char *argv[]) {
 			min_grade = current_grade;
 		}
 	}
+	//calculating median grade
+	int grade_counter;
+	int median_position=((students_count+1)/2);
+	for (int grade=0; grade<=TOP_GRADE-1; grade++){
+		grade_counter=hist[grade];
+		while (grade_counter!=0){
+			grade_counter--;
+			median_position--;
+			if (median_position==0){
+				med_grade=(grade+1);
+			}
+		}
+	}
 	//analysing the grade which were stored beforehand
 	mean_grade = ((double)grades_sum/(double)students_count);
-	med_grade = ((students_count+1)/2);
 	pass_percent = ((double)pass_count/(double)students_count)*PERCENT_FACTOR;
 	
 	fprintf(output_file,"num of students = %d\n",students_count);
