@@ -111,6 +111,10 @@ int main(int argc, char *argv[]) {
 	}
 	fclose (output_file);
 	fclose (input_file);
+	if (input_file == NULL || output_file == NULL){
+		fprintf(stderr, "Closing error\n");
+		return 1;
+	}
 	return 0;
 }
 
