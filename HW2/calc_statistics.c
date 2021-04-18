@@ -27,6 +27,7 @@
 #define PERCENT_FACTOR 100
 #define DIGITS_IN_LINE 10
 #define LINE_COUNT 10
+#define ERROR -1
 
 /**
  * @brief Calculates statistical analysis of grades
@@ -44,7 +45,7 @@ int main(int argc, char *argv[]) {
 	FILE *input_file, *output_file;
 	input_file = fopen("grades.txt", "r");
 	output_file = fopen("course_statistics.txt", "w");
-	if (input_file == NULL || output_file == NULL){
+	if (input_file == ERROR || output_file == ERROR){
 		fprintf(stderr, "Reading error\n");
 		return 1;
 	}
@@ -111,7 +112,7 @@ int main(int argc, char *argv[]) {
 	}
 	fclose (output_file);
 	fclose (input_file);
-	if (input_file == NULL || output_file == NULL){
+	if (input_file == ERROR || output_file == ERROR){
 		fprintf(stderr, "Closing error\n");
 		return 1;
 	}
