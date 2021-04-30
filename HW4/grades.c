@@ -10,6 +10,7 @@
 #define MIN_GRADE 0
 #define ERROR 1
 
+
 struct grades {
 	struct list* student_list;
 };
@@ -158,7 +159,7 @@ int grades_add_grades(struct grades *grades,const char *name,int id,int grade){
 	
 	struct course* p_new_course=&new_course;
 	
-	return list_push_back(selected_student_node->course_list,p_new_course)
+	return list_push_back(selected_student_node->course_list,p_new_course);
 }
 
 /*
