@@ -1,5 +1,5 @@
 
-#include <stddef.h>
+//#include <stddef.h> already in linkedlist,
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -9,8 +9,9 @@
 #define MAX_GRADE 100
 #define MIN_GRADE 0
 #define ERROR 1
+#define SUCCESS 0
 
-
+//---------------------------------------------------------------------------//
 struct grades {
 	struct list* student_list;
 };
@@ -26,25 +27,39 @@ struct course {
 	int grade;
 };
 
+//---------------------------------------------------------------------------//
 int clone_student (void *element, void **output){
 	
-	struct student *original= (struct student*)element;
-	struct student *replica;
-	replica->name=(char*)malloc(sizeof(char)*(strlen(original->name)+1));
+	//declarations
+	struct student *original=(struct student*)element;
+	struct student **replica=(struct student**)(output);
+	*replica=(struct student*)malloc(sizeof(struct student));
+	if(!replica){
+		free(replica);
+		return ERROR;
+	}
 	
-	if (!(replica->name)){
-		//malloc error
+	//cloning name (as a string)
+	char* p_name=(char*)malloc(sizeof(char)*(strlen(original->name)+1));
+	if (!p_name){
+		free(p_name);
 		return ERROR;
 	}	
+	strcpy(p_name,original->name);
 	
-	strcpy(replica->name,original->name);
-	replica->id=original->id;
-	replica->course_list=original->course_list;
-	output=&replica;
+	//cloning id
+	(*replica)->id=original->id;
 	
-	return 0;
+	//cloning course list
+	(*replica)->course_list=original->course_list;
+	
+	//freeing original given student struct
+	free(original);
+	
+	return SUCCESS;
 }
 
+//---------------------------------------------------------------------------//
 void destroy_student (void *element){
 	
 	struct student *student_to_destroy=(struct student*)element;
@@ -53,24 +68,41 @@ void destroy_student (void *element){
 	free(student_to_destroy);
 }
 
+//---------------------------------------------------------------------------//
 int clone_course (void *element, void **output){
 	
-	struct course *original= (struct course*)element;
-	struct course *replica;
-	replica->name=(char*)malloc(sizeof(char)*(strlen(original->name)+1));
+	//declarations
+	struct course *original=(struct course*)element;
+	struct course **replica=(struct course**)(output);
+	*replica-(struct student*)malloc(size(struct course));
 	
-	if (!(replica->name)){
-		//malloc error
+	if(!replica){
+		free(replica);
 		return ERROR;
-	}	
+	}
 	
-	strcpy(replica->name,original->name);
-	replica->grade=original->grade;
-	output=&replica;
+	//cloning name (as a string)
+	char* p_name=(char*)malloc(sizeof(char)*(strlen(original->name)+1));
 	
-	return 0;
+	if(!p_name){
+		free(replica);
+		return ERROR;
+	}
+	
+	stcpy(p_name,original->name);
+	(*replica)->name=p_name;
+	
+	//cloning grade 
+	(*replica)->grade=original->grade;
+	
+	//freeing original given course struct
+	free(original);
+	
+	return SUCCESS;
 }
 
+
+//---------------------------------------------------------------------------//
 void destroy_course (void *element){
 	
 	struct course *course_to_destroy=(struct course*)element;
@@ -78,16 +110,21 @@ void destroy_course (void *element){
 	free(course_to_destroy);
 }
 
+//---------------------------------------------------------------------------//
 //initialising student list w/o course list
 struct grades* grades_init() {
 	
 	struct grades* grades;
-	
+	grades=(struct grades*)malloc(size(struct grades));
+	if(!grades){
+		free(grades);
+		return ERROR;
+	}
 	element_clone_t student_clone=clone_student;
 	element_destroy_t student_destroy=destroy_student;
 	
-	element_clone_t course_clone=clone_course;
-	element_destroy_t course_destroy=destroy_course;
+	//element_clone_t course_clone=clone_course;
+	//element_destroy_t course_destroy=destroy_course;
 	
 	grades->student_list=list_init(student_clone,student_destroy);
 
@@ -95,18 +132,20 @@ struct grades* grades_init() {
 	
 }
 
+//---------------------------------------------------------------------------//
 void grades_destroy(struct grades *grades){
 	
-	//using destroy_course and destroy_student
+	list_destroy(grades->student_list);
+	free(grades);
 }
 
-
+//---------------------------------------------------------------------------//
 int grades_add_student(struct grades *grades, const char *name, int id) {
 		
 	if(!grades){
 		return ERROR;
 	}
-	if (student_exists(grades->student_list,id,NULL)) { //NULL fails
+	if (student_exists(grades->student_list,id,NULL)) {
 		return ERROR; //fail, as the student already exists
 	}
 	
@@ -127,7 +166,7 @@ int grades_add_student(struct grades *grades, const char *name, int id) {
 	return list_push_back(grades->student_list, p_new_student);
 }
 
-
+//---------------------------------------------------------------------------//
 int grades_add_grades(struct grades *grades,const char *name,int id,int grade){
 	
 	if (!grades){
@@ -161,7 +200,7 @@ int grades_add_grades(struct grades *grades,const char *name,int id,int grade){
 	
 	return list_push_back(selected_student_node->course_list,p_new_course);
 }
-
+//---------------------------------------------------------------------------//
 /*
 float grades_calc_avg(struct grades *grades,int id,char **out){
 	
@@ -171,7 +210,8 @@ float grades_calc_avg(struct grades *grades,int id,char **out){
 	
 	
 }	
-	
+
+//---------------------------------------------------------------------------//	
 int grades_print_student(struct grades *grades, int id){
 	
 	
@@ -180,6 +220,7 @@ int grades_print_student(struct grades *grades, int id){
 	
 }
 
+//---------------------------------------------------------------------------//
 int grades_print_all(struct grades *grades){
 	
 	
@@ -188,6 +229,7 @@ int grades_print_all(struct grades *grades){
 	
 }
 
+//---------------------------------------------------------------------------//
 */
 
 //1 means existing, 0 means non existing
@@ -212,7 +254,7 @@ int student_exists(struct list *list,int id,struct student *selected_student){
 	return 0;	
 }
 	
-
+//---------------------------------------------------------------------------//
 //1 means existing, 0 means non existing
 int course_exists(struct list* list, char* name){
 	struct iterator *course_iterator=list_begin(list);
@@ -226,3 +268,4 @@ int course_exists(struct list* list, char* name){
 	}
 	return 0;
 }
+//---------------------------------------------------------------------------//
