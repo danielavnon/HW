@@ -12,6 +12,7 @@
 #define SUCCESS 0
 #define EXISTS 1
 #define NON_EXISTING 0
+#define AVERAGE_ERROR (-1)
 
 
 //---------------------------------------------------------------------------//
@@ -29,41 +30,85 @@ struct course {
 	char *name;
 	int grade;
 };
+/**
+*@brief Clones course
+*@return SUCCESS in case of a success, ERROR otherwise
+*@note failes if given element is invalid or memory allocation problem
+*/
 
 //---------------------------------------------------------------------------//
-//returns EXISTS, in case found, NON_EXISTING otherwise
+int clone_course (void *element, void **output){
+	
+	//declarations
+	struct course *original=(struct course*)element;
+	struct course *replica=(struct course*)malloc(sizeof(struct course));
+	if(!replica){
+		return ERROR;
+	}
+	
+	//cloning name (as a string)
+
+	replica->name=malloc(sizeof(char)*(strlen(original->name)+1));
+	
+	if(!(replica->name)){
+		free(replica);
+		return ERROR;
+	}
+	
+	strcpy(replica->name,original->name);
+	
+	//cloning grade
+	replica->grade=original->grade;
+
+	*output=replica;
+	return SUCCESS;
+}
+/**
+*@brief Destroys course
+*@return nothing as the function is void
+*@note failes if given element is invalid
+*/
+
+//---------------------------------------------------------------------------//
+void destroy_course (void *element){
+	
+	struct course *course_to_destroy=(struct course*)element;
+	free(course_to_destroy->name);
+	free(course_to_destroy);
+}
+
+//---------------------------------------------------------------------------//
+/**
+*@brief checks if the student exists in grades list
+*@return EXISTS in case of existance, NON_EXISTING otherwise
+*/
 int student_exists(struct grades* grades, int id){
-printf("d1\n");
+
 	struct iterator* iterator=list_begin(grades->student_list);
-	printf("d2\n");
 	struct student* current_student;
-	printf("d3\n");
-	while(!iterator){
-	printf("d4\n");
+	while(iterator){
 		current_student=list_get(iterator);
-			printf("d5\n");
 		if(!current_student){
-					printf("d6\n");
 			return NON_EXISTING;
 		}
 		if(current_student->id==id){
-			printf("d7\n");
 			return EXISTS;
 		}
-			printf("d8\n");
 		iterator=list_next(iterator);
-	}	printf("d9\n");
+	}
 	return NON_EXISTING;
 } 
 
 //---------------------------------------------------------------------------//
 
-//returns a pointer to the selected student node, in case found
-//otherwise, NULL
+/**
+*@brief checks if the studnet exists in grades list
+*@return a pointer on the student in case found, NULL otherwise
+*/
 struct student* student_finder(struct list* list, int id){
 	struct iterator* iterator=list_begin(list);
 	struct student* current_student;
-	while(!iterator){
+	while(iterator){
 		current_student=list_get(iterator);
 		if(current_student->id==id){
 			return current_student;
@@ -75,11 +120,14 @@ struct student* student_finder(struct list* list, int id){
 
 
 //---------------------------------------------------------------------------//
-//returns EXISTS, in case found, NON_EXISTING otherwise
-int course_exists(struct list* list, char* name){
+/**
+*@brief checks if the course exists in course list
+*@return EXISTS in case of a existance, NON_EXISTING otherwise
+*/
+int course_exists(struct list* list, const char* name){
 	struct iterator* iterator=list_begin(list);
 	struct course* current_course;
-	while(!iterator){
+	while(iterator){
 		current_course=list_get(iterator);
 		if(!(strcmp(current_course->name,name))){
 			return EXISTS;
@@ -89,41 +137,59 @@ int course_exists(struct list* list, char* name){
 	return NON_EXISTING;
 }
 
-
+/**
+*@brief Clones student
+*@return SUCCESS in case of a success, ERROR otherwise
+*@note failes if given element is invalid or memory allocation problem
+*/
 //---------------------------------------------------------------------------//
 int clone_student (void *element, void **output){
 	
 	//declarations
 	struct student *original=(struct student*)element;
-	struct student **replica=(struct student**)(output);
-	*replica=(struct student*)malloc(sizeof(struct student));
+	struct student *replica=(struct student*)(*output);
+	replica=(struct student*)malloc(sizeof(struct student));
 	if(!replica){
 		free(replica);
 		return ERROR;
 	}
 	
 	//cloning name (as a string)
-	char* name;
-	name=(char*)malloc(sizeof(char)*(strlen(original->name)+1));
-	if (!name){
-		free(name);
+	replica->name=(char*)malloc(sizeof(char)*(strlen(original->name)+1));
+	
+	if (!(replica->name)){
+		free(replica);
 		return ERROR;
 	}	
-	strcpy(name,original->name);
+	strcpy(replica->name,original->name);
 	
 	//cloning id
-	(*replica)->id=original->id;
+	replica->id=original->id;
 	
-	//cloning course list
-	(*replica)->course_list=original->course_list;
+	//initialising course list and cloning it
 	
-	//freeing original given student struct
-	free(original);
+	element_clone_t course_clone=clone_course;
+	element_destroy_t course_destroy=destroy_course;
+
+	struct list* course_list=list_init(course_clone,course_destroy);
+	if(!course_list){
+		free(replica->name);
+		return ERROR;
+	}
+	
+	replica->course_list=course_list;
+	*output=replica;
 	
 	return SUCCESS;
 }
-
 //---------------------------------------------------------------------------//
+/**
+*@brief Destroys student
+*@return nothing as the function is void
+*@note failes if given element is invalid
+*/
+
+
 void destroy_student (void *element){
 	
 	struct student *student_to_destroy=(struct student*)element;
@@ -133,49 +199,6 @@ void destroy_student (void *element){
 }
 
 //---------------------------------------------------------------------------//
-int clone_course (void *element, void **output){
-	
-	//declarations
-	struct course *original=(struct course*)element;
-	struct course **replica=(struct course**)(output);
-	*replica=(struct course*)malloc(sizeof(struct course));
-	
-	if(!replica){
-		free(replica);
-		return ERROR;
-	}
-	
-	//cloning name (as a string)
-	char* name=(char*)malloc(sizeof(char)*(strlen(original->name)+1));
-	
-	if(!name){
-		free(replica);
-		return ERROR;
-	}
-	
-	strcpy(name,original->name);
-	(*replica)->name=name;
-	
-	//cloning grade 
-	(*replica)->grade=original->grade;
-	
-	//freeing original given course struct
-	free(original);
-	
-	return SUCCESS;
-}
-
-
-//---------------------------------------------------------------------------//
-void destroy_course (void *element){
-	
-	struct course *course_to_destroy=(struct course*)element;
-	free(course_to_destroy->name);
-	free(course_to_destroy);
-}
-
-//---------------------------------------------------------------------------//
-//initialising student list w/o course list
 struct grades* grades_init() {
 	
 	struct grades* grades;
@@ -202,48 +225,56 @@ void grades_destroy(struct grades *grades){
 
 //---------------------------------------------------------------------------//
 int grades_add_student(struct grades *grades, const char *name, int id) {
-	printf("1\n");	
 	if(!grades){
-	printf("2\n");
+
 		return ERROR;
 	}
-	printf("3\n");
 	if(student_exists(grades,id)) {
-		printf("4\n");
+
 		return ERROR;
 	}
-	printf("5\n");
+
 	//initialisng a new student node
 	struct student* new_student;
-	printf("6\n");
 	new_student=(struct student*)malloc(sizeof(struct student));
-	printf("7\n");
 	if(!new_student){
-		printf("8\n");
-		free(new_student);
-		printf("9\n");
 		return ERROR;
 	}
-	printf("10\n");
+
 	//feeding name (as a string)
 	new_student->name=(char*)malloc(sizeof(char)*(strlen(name)+1));
 	if(!(new_student->name)){
-		free(new_student->name);
+		free(new_student);
 		return ERROR;
 	}
+
 	strcpy(new_student->name,name);
 	
+
 	//feeding id
 	new_student->id=id;
 
 	element_clone_t course_clone=clone_course;
 	element_destroy_t course_destroy=destroy_course;
-
-
-	//creating a course list of the newly initialised student
-	new_student->course_list=list_init(course_clone,course_destroy);
+	struct list* course_list=list_init(course_clone,course_destroy);
+	if(!course_list){
+		free(new_student->name);
+		free(new_student);
+		return ERROR;
+	}
 	
-	return list_push_back(grades->student_list, new_student);
+	//creating a course list of the newly initialised student
+	new_student->course_list=course_list;
+	if((list_push_back(grades->student_list, new_student))){
+		free(new_student->name);
+		list_destroy(new_student->course_list);
+		free(new_student);
+		return ERROR;
+	}
+	free(new_student->name);
+	list_destroy(new_student->course_list);
+	free(new_student);
+	return SUCCESS;
 }
 
 //---------------------------------------------------------------------------//
@@ -256,44 +287,47 @@ int grades_add_grade(struct grades *grades,const char *name,int id,int grade){
 	if (grade>=MAX_GRADE||grade<=MIN_GRADE){
 		return ERROR;
 	}
-	printf("add_grade1\n");
+	
 	//checking if student exists in student list
 	struct student* selected_student_node;
 	selected_student_node=student_finder(grades->student_list, id);
-	printf("add_grade2\n");
 	if(!(student_exists(grades,id))){
-	printf("add_grade3\n");
 		return ERROR;
 	}
-	printf("add_grade4\n");
+	
 	//checking if course exists in grades' list of selected student	
 	if(course_exists(selected_student_node->course_list,name)){
-	printf("add_grade5\n");
 		return ERROR;
 	}
-	printf("add_grade6\n");
+	
 	//initialising a new course node
 	struct course* new_course;
 	new_course=(struct course*)malloc(sizeof(struct course));
-	printf("add_grade7\n");
 	if(!new_course){
-	printf("add_grade8\n");
-		free(new_course);
 		return ERROR;
-	}printf("add_grade9\n");
+	}
 	//feeding name (as a string)
 	new_course->name=(char*)malloc(sizeof(char)*(strlen(name)+1));
-	printf("add_grade10\n");
+
 	if(!(new_course->name)){
-		free(new_course->name);
+		free(new_course);
 		return ERROR;
 	}
 	strcpy(new_course->name,name);
 	
 	//feedind grade
 	new_course->grade=grade;
-printf("add_grade11\n");
-	return list_push_back(selected_student_node->course_list,new_course);
+	
+	if(!(list_push_back(selected_student_node->course_list,new_course))){
+		free(new_course->name);
+		free(new_course);
+		return SUCCESS;
+	}
+	else {
+		free(new_course->name);
+		free(new_course);
+		return ERROR;
+	}
 }
 
 //---------------------------------------------------------------------------//
@@ -301,20 +335,40 @@ float grades_calc_avg(struct grades *grades,int id,char **out){
 	
 	//checking feasibility of inputs
 	if(!grades){
-		return ERROR;
+		out=NULL;
+		return AVERAGE_ERROR;
 	}
 	if(!(student_exists(grades,id))){
-		return ERROR;
+		out=NULL;
+		return AVERAGE_ERROR;
 	}
+	
+	
 	//initialising a pointer on selected student node
 	struct student* selected_student_node;
 	selected_student_node=student_finder(grades->student_list, id);
 	
+	
+	//copying selected student name into out
+	int selected_student_name_len=(strlen(selected_student_node->name)+1);
+	char* name=(char*)malloc(sizeof(char)*(selected_student_name_len));
+	
+	if(!name){
+		out=NULL;
+		free(name);
+		return AVERAGE_ERROR;
+	}
+
+	strcpy(name,selected_student_node->name);
+	*out=name;
+
+	
 	//initialising variables to calulate the average grade
-	int tally=0;
+	float tally=0;
 	int courses_count=list_size(selected_student_node->course_list);
 	
 	if(!courses_count){
+		out=NULL;
 		return tally;
 	}
 	
@@ -323,7 +377,7 @@ float grades_calc_avg(struct grades *grades,int id,char **out){
 	
 	if (!iterator){
 		out=NULL;
-		return ERROR;
+		return AVERAGE_ERROR;
 	}
 	
 	struct course* current_course;
@@ -331,13 +385,10 @@ float grades_calc_avg(struct grades *grades,int id,char **out){
 		current_course=list_get(iterator);
 		tally+=(current_course->grade);
 		iterator=list_next(iterator);
+		
 	}
-	
-	//char* name=
-	//(char*)malloc(sizeof(char)*(strlen(selected_student_node->name)+1);
-
-	strcpy(*out,selected_student_node->name);
-	return (float)(tally/courses_count);
+	float average=((tally)/(courses_count));
+	return average;
 }	
 
 //---------------------------------------------------------------------------//	
@@ -358,6 +409,7 @@ int grades_print_student(struct grades *grades, int id){
 	printf("%s %d:",selected_student_node->name,id);
 	
 	struct iterator* iterator=list_begin(selected_student_node->course_list);
+	
 	struct course* current_course;
 	
 	//printing while iterating through course list
@@ -371,7 +423,6 @@ int grades_print_student(struct grades *grades, int id){
 	}
 	printf("\n");
 	return SUCCESS;
-
 }
 
 //---------------------------------------------------------------------------//
@@ -393,4 +444,3 @@ int grades_print_all(struct grades *grades){
 	
 	return SUCCESS;
 }
-
