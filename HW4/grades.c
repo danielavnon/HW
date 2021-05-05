@@ -284,7 +284,7 @@ int grades_add_grade(struct grades *grades,const char *name,int id,int grade){
 	if (!grades){
 		return ERROR;
 	}
-	if (grade>=MAX_GRADE||grade<=MIN_GRADE){
+	if (grade>MAX_GRADE||grade<MIN_GRADE){
 		return ERROR;
 	}
 	
