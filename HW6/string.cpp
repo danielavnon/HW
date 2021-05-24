@@ -10,8 +10,8 @@ String::String(){
 }
 
 String::String(const String &str){
-	length(str.length);
-	data(allocate_and_copy(str.data, str.length));
+	length = str.length;
+	data = allocate_and_copy(str.data,length);
 }
 
 String::String(const char *str){
@@ -36,15 +36,13 @@ String& String::operator=(const String &rhs){
 }
 
 String& String::operator=(const char *str){
-	if(this.data == str){
+	if(this->data == str){
 		return *this;
 	}
 	delete[] data;
-	length = stelen(str);
+	length = strlen(str);
 	data = allocate_and_copy(str,length);
 	return *this;
-	
-	
 }
 
 bool String::equals(const String &rhs) const{
@@ -57,7 +55,7 @@ bool String::equals(const String &rhs) const{
 
 bool String::equals(const char *rhs) const{
 	
-	if(this.data == rhs){
+	if(this->data == rhs){
 		return true;
 	}
 	else return false;
