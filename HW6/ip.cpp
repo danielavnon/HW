@@ -1,0 +1,3 @@
+
+#define MASK_SEGMENTS 2
+#define IP_SEGMENTS 2
