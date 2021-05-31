@@ -1,6 +1,4 @@
 #include "string.h"
-#include <cstring>
-#include <iostream>
 #include "ip.h"
 
 #define NULL_SIGN '\0'
@@ -72,7 +70,7 @@ void String::split(const char *delimiters, String **output, size_t *size) const{
 	
 	//input correctness checks
 
-	if(output == NULL || delimiters == NULL || data == NULL){
+	if(delimiters == NULL || data == NULL){
 		return;
 	}
 
@@ -97,9 +95,13 @@ void String::split(const char *delimiters, String **output, size_t *size) const{
 	}
 
 	*size = substrings_count;
+	if(output == NULL){
+		return;
+	}
+
 	*output = new String[substrings_count];
 	
-	for (i = 0; i < len; i++){
+	for (i = 0; i < len+1; i++){
 
 		if(data_clone[i]==NULL_SIGN && i>0 && data_clone[i-1]!=NULL_SIGN){
 			(*output)[i_substring]=String(&data_clone[start]);
@@ -137,7 +139,7 @@ String String::trim() const{
 	end++;
 	char trimmed_string[end-start+1];
 	strncpy(trimmed_string,&data[start],end-start);
-	trimmed_string[end-start]=SPACE_SIGN;
+	trimmed_string[end-start]=NULL_SIGN;
 
 	String trimmed_structure= String(trimmed_string);
 
