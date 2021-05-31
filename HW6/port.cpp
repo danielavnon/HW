@@ -48,8 +48,8 @@ bool Port::match_value(String val) const{
 	int packet_value; // port number recieved from field 
 	
 	packet_value = (short)val.trim().to_integer();
-	
-	if(packet_value >= range[0] && packet_value <= range[PORT_SEGMENTS]){
+	//fillet
+	if(packet_value >= range[0] && packet_value <= range[PORT_SEGMENTS-1]){
 		return true;	
 	}
 	return false;
