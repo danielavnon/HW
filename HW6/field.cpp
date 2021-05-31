@@ -4,6 +4,7 @@
 #include <cstring>
 
 #define DELIM ",="
+#define DOUBLE 2
 
 /* copy constructor, no default constructor
  * we used this-> notation instead of pattern=pattern as the lefthandside
@@ -41,7 +42,7 @@ bool Field::match(String packet){
 	}
 
 	int i;
-	for(i=0; i<(int)size; i++){
+	for(i=0; i<(int)size; i+=DOUBLE){
 		substrings[i].trim();
 		substrings[i+1].trim();
 		if(pattern.equals(substrings[i]) && match_value(substrings[i+1])){
