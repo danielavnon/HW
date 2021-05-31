@@ -1,5 +1,5 @@
-#ifndef PORT_H
-#define PORT_H
+#ifndef IP_H
+#define IP_H
 
 #include "string.h"
 #include "field.h"
@@ -11,14 +11,17 @@ for example 22-30, there are 2 numbers: 22, 30
 class Ip : public Field{
 	
 private:
-	int low
-	int high
+	int low_feasible_ip;
+	int high_feasible_ip;
+	int given_ip;
+	int mask;
 	// these two integers are referenced, disputed
 	
 public:
 	Ip(String pattern);
 	bool set_value(String val);
 	bool match_value(String val) const;
+	int united_ip(String ip_to_unite) const;
 	
 };
 #endif
