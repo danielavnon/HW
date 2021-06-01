@@ -13,15 +13,15 @@ class Ip : public Field{
 private:
 	int low_feasible_ip;
 	int high_feasible_ip;
-	int given_ip;
 	int mask;
+	int given_ip;
 	// these two integers are referenced, disputed
 	
 public:
 	Ip(String pattern);
 	bool set_value(String val);
 	bool match_value(String val) const;
-	int united_ip(String ip_to_unite) const;
+	int united_ip(String ip_to_unite) const; // an explanation is the cpp file
 	
 };
 #endif
