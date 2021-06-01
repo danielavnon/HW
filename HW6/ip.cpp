@@ -11,6 +11,9 @@
 #define IP_ERROR (-1)
 #define DOT_SIGN "."
 #define IP_SEG_SIZE 8
+#define FULL_MASK 0xFFFFFFFF
+
+
 
 
 Ip::Ip(String pattern): Field(pattern){
@@ -40,7 +43,7 @@ bool Ip::set_value(String val){
 		return false;
 	}
 
-	int bitmask = (1<< (IP_SEG_SIZE*IP_SEGMENTS-mask))-1;
+	int bitmask = (1 << ((IP_SEG_SIZE*IP_SEGMENTS)-mask)) -1;
 
 	given_ip = united_ip(substrings[0].trim());
 	// we'll have to define return error value for latter function, currently 0
@@ -52,8 +55,6 @@ bool Ip::set_value(String val){
 
 	low_feasible_ip= given_ip & (~bitmask);
 	high_feasible_ip= given_ip | bitmask;
-
-
 
 	return true;
 
@@ -72,10 +73,17 @@ bool Ip::match_value(String val) const{
 	return false;
 }
 
+/**
+ * @brief concatenates and shifts a string into an integer
+ * @param ip_to_unite a String which is being assessed into an integer
+ * @return ERROR is all cases of an error, else the assessted
+ * @note a method which has not been introducted in the questionnaire
+ */
 
-int Ip::united_ip(String ip_to_unite) const{
+
+int Ip::united_ip(String ip_to_unite)const{
 	String* substrings;
-	size_t size;
+	size_t size=0;
 
 	ip_to_unite.split(DOT_SIGN,&substrings,&size);
 
