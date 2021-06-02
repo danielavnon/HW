@@ -14,8 +14,8 @@ all: ${DEST_APP}
 ${DEST_LIB}:
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(LIB_SOURCES) -o lib$(DEST_LIB).so
 
-${DEST_APP}:
- 	$(CXX) $(CXXFLAGS) $(APP_SOURCES) -o $(DEST_APP) -l$(DEST_LIB) -l$(input)
+${DEST_APP}: ${DEST_LIB}
+	$(CXX) $(CXXFLAGS) $(APP_SOURCES) -o $(DEST_APP) -lfirewall -linput -L.
  	
 clean:
 	rm -f $(DEST_APP) $(DEST_LIB)
