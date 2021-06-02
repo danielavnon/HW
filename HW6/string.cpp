@@ -52,10 +52,12 @@ String& String::operator=(const char *str){
 
 bool String::equals(const String &rhs) const{
 	
-	if(this == &rhs){
+	if((length == rhs.length) && !strcmp(data, rhs.data)){
 		return true;
 	}
-	else return false;
+	else{
+	    return false;
+	}
 }
 
 bool String::equals(const char *rhs) const{
@@ -155,4 +157,3 @@ char* allocate_and_copy(const char* str,int size){
 	}
 	else return strcpy(new char[size+1],str);
 }
-
