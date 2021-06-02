@@ -1,4 +1,5 @@
 
+
 #include "field.h"
 #include <iostream>
 #include <cstring>
@@ -32,26 +33,24 @@ Field::~Field(){
 
 bool Field::match(String packet){
 
-	String *substrings;
+	String *substr;
 	size_t size = 0;
-	packet.split(DELIM,&substrings,&size);
+	packet.split(DELIM,&substr,&size);
 
 	if(size == 0){ //empty packet
-		delete[] substrings;
+		delete[] substr;
 		return false;
 	}
 
 	int i;
 	for(i=0; i<(int)size; i+=DOUBLE){
-		substrings[i].trim();
-		substrings[i+1].trim();
-		if(pattern.equals(substrings[i]) && match_value(substrings[i+1])){
-			delete[] substrings;
+        if(pattern.equals(substr[i].trim()) && match_value(substr[i+1].trim())){
+			delete[] substr;
 			return true;
 
 		}
 	}
-	delete[] substrings;
+	delete[] substr;
 	return false;
 
 
