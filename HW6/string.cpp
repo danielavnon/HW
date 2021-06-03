@@ -76,7 +76,7 @@ void String::split(const char *delimiters, String **output, size_t *size) const{
 		return;
 	}
 
-	int i, j, i_deli, i_substring = 0;
+	int i, i_deli, i_substring = 0;
 	int substrings_count = 1;
 	int num_delimiters;
 	int start = 0;
@@ -107,12 +107,13 @@ void String::split(const char *delimiters, String **output, size_t *size) const{
 
 		if(data_clone[i]==NULL_SIGN && i>0 && data_clone[i-1]!=NULL_SIGN){
 			(*output)[i_substring]=String(&data_clone[start]);
-			j=i;
-			while(data_clone[j]==NULL_SIGN){
-				j++;
-			}
-			start=j;
+			//j=i;
+			//while(data_clone[j]==NULL_SIGN){
+			//	j++;
+			//}
+			//start=j;
 			i_substring++;
+			start = i + 1;
 		}
 	}
 	return;
