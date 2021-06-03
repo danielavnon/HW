@@ -1,4 +1,3 @@
-
 #include "ip.h"
 #include "string.h"
 
@@ -55,7 +54,7 @@ bool Ip::set_value(String val){
 
 	low_feasible_ip= given_ip & (~bitmask);
 	high_feasible_ip= given_ip | bitmask;
-
+	delete[] substrings;
 	return true;
 
 }
@@ -98,5 +97,6 @@ int Ip::united_ip(String ip_to_unite)const{
 	for(i=0; i<IP_SEGMENTS;i++){
 		ip_to_return+=(substrings[i].trim().to_integer())<<(IP_SEG_SIZE*(i));
 	}
+	delete[] substrings;
 	return ip_to_return;
 }
