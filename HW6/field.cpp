@@ -38,7 +38,7 @@ bool Field::match(String packet){
 	packet.split(DELIM,&substr,&size);
 
 	if(size == 0){ //empty packet
-		delete[] substr;
+		//delete[] substr;
 		return false;
 	}
 
