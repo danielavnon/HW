@@ -40,26 +40,26 @@ int main(int argc,char** argv){
 	String* substrings;
 	size_t size=0;
 
-	argument.trim().split(DELIM, &substrings,&size);
+
+	argument.split(DELIM, &substrings,&size);
 
 	if ((int)size != FILTER_NUM){
 		delete[] substrings;
 		return ERROR;
 	}
 
+	String field_type = substrings[0].trim();
+	String field_value = substrings[1].trim();
 
-	for (int i=0;i<FILTER_NUM;i++){
-		substrings[i].trim();
-	}
 
-	if(substrings[0].equals(SOURCE_PORT) || substrings[0].equals(DEST_PORT)){
-		Port input_port(substrings[0]);
-		input_port.set_value(substrings[1]);
+	if(field_type.equals(SOURCE_PORT) || field_type.equals(DEST_PORT)){
+		Port input_port(field_type);
+		input_port.set_value(field_value);
 		parse_input(input_port);
 	}
-	else if(substrings[0].equals(SOURCE_IP) || substrings[0].equals(DEST_IP)){
-		Ip input_ip(substrings[0]);
-		input_ip.set_value(substrings[1]);
+	else if(field_type.equals(SOURCE_IP) || field_type.equals(DEST_IP)){
+		Ip input_ip(field_type);
+		input_ip.set_value(field_value);
 		parse_input(input_ip);
 	}
 	else{
