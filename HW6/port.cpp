@@ -1,4 +1,3 @@
-
 #include "port.h"
 #include <cstdlib>
 
@@ -25,18 +24,25 @@ bool Port::set_value(String val){
 	
 	if (size != PORT_SEGMENTS){
 		//means there was not any 2 segments which to define the expected range
-		delete[] substrings;
+		if (0 != size){
+		/* if size == 0 then substr was not allocated*/
+			delete[] substrings;
+		}
 		return false;
 		
 	}
-	for (int i=0; i<PORT_SEGMENTS; i++){
-		range[i]=(short)substrings[i].trim().to_integer();
-	}
+	
+	range[0] = substrings[0].trim().to_integer();
+	range[1] = substrings[1].trim().to_integer();
+	
 	delete[] substrings;
+	
 	if(range[0] > range[PORT_SEGMENTS-1]){
 		return false;
 	}
-	return true;
+	else{
+		return true;
+	}
 
 }
 
@@ -45,12 +51,8 @@ bool Port::set_value(String val){
 
 
 bool Port::match_value(String val) const{
-	int packet_value; // port number recieved from field 
+	int packet_value = val.trim().to_integer(); // port number recieved from field 
 	
-	packet_value = (short)val.trim().to_integer();
 	//fillet
-	if(packet_value >= range[0] && packet_value <= range[PORT_SEGMENTS-1]){
-		return true;	
-	}
-	return false;
+	return ( (range[0] <= packet_value) && (packet_value <= range[1]));
 }
