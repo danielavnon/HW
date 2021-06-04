@@ -102,16 +102,16 @@ void String::split(const char *delimiters, String **output, size_t *size) const{
 	}
 
 	*output = new String[substrings_count];
-	
+	int j=0;
 	for (i = 0; i < len+1; i++){
 
 		if(data_clone[i]==NULL_SIGN && i>0 && data_clone[i-1]!=NULL_SIGN){
 			(*output)[i_substring]=String(&data_clone[start]);
-			//j=i;
-			//while(data_clone[j]==NULL_SIGN){
-			//	j++;
-			//}
-			//start=j;
+			j=i;
+			while(data_clone[j]==NULL_SIGN){
+				j++;
+			}
+			start=j;
 			i_substring++;
 			start = i + 1;
 		}
