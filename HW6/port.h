@@ -12,14 +12,14 @@ for example 22-30, there are 2 numbers: 22, 30
 class Port : public Field{
 	
 private:
-	short range[PORT_SEGMENTS];
+	int range[PORT_SEGMENTS];
 
 	
 public:
 	
 	Port(String pattern);
-	bool set_value(String val);
-	bool match_value(String val) const;
+	virtual bool set_value(String val);
+	virtual bool match_value(String val) const;
 	
 };
 #endif
