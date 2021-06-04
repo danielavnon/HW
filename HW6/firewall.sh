@@ -1,21 +1,31 @@
 #!/bin/bash
 
-
-input=`cat`
+#save input
+pack_in=`cat`
 
 output=""
 
 	while read rule
 	do
-		rule=`echo "$rule" | sed '/^$/d' | sed 's/ //g' | grep -o '^[^#]*'`
+		#deals with spaces,line and comments
+		rule=`echo "$rule" |sed 's/ //g' | sed '/^$/d' | grep -o '^[^#]*'`
+		
 		if [[ -n $rule ]]; then
-			readarray -d , -t filter <<< "$rule"
+			#turn the rule into filters
+			readarray -d , -t filters <<< "$rule"
+			#check packets
 			
-			feasible_rule=`echo "$input" | ./firewall.exe "${filter[0]}" | ./firewall.exe "${filter[1]}" | ./firewall.exe "${filter[2]}" | ./firewall.exe "${filter[3]}"`
-			output+=`echo "${feasbile_rule}" | sed '/^$/d' | sort -u `
+			#uses the filters ont the packets
+			packs_out_rules_new=`echo "$pack_in" | ./firewall.exe "${filters[0]}" | ./firewall.exe "${filters[1]}" | ./firewall.exe "${filters[2]}" | ./firewall.exe "${filters[3]}"`
+			#create output
+			#add the passed packets to output
+			output+=`echo "${packs_out_rules_new}" | sed '/^$/d' | sort -u `
 			output+="\n"
 		fi
-	done < "$1"
-	
-	echo -e "${output}" | sed 's/ //g' | sed '/^$/d' | sort -u
 		
+	 done < "$1" # $1 is the argument of rules filename 
+
+	echo -e "${output}" | sed '/^$/d' | sed 's/ //g' | sort -u
+
+
+
