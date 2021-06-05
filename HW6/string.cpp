@@ -6,7 +6,7 @@
 #define DOT_SIGN '.'
 
 
-char* allocate_and_copy(const char* str,int size);
+
 
 String::String(){
 	data = new char[1];
