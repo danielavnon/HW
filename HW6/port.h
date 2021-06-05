@@ -17,8 +17,24 @@ private:
 	
 public:
 	
+	/**
+     * @brief Default constructor using a given variable
+     * @param pattern is a given String typed variable
+     */
 	Port(String pattern);
+	
+	/**
+     * @brief sets the values to deter which Ip typed variable
+     * satisfy firewall settings
+     * @return true if set was complete, else false
+     */
 	virtual bool set_value(String val);
+	
+		/**
+     * @brief checks if a given String typed variable is mathcing the
+     * firewall settings
+     * @return true if matching, else false
+     */
 	virtual bool match_value(String val) const;
 	
 };
