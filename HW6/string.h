@@ -69,6 +69,15 @@ public:
      * Does not change this.
      */
     String trim() const;
+    
+        /**
+     * @brief allocates and copy a new string
+     * @param *str a pointer to a given string
+     * @param size the size of the given string
+     * @return a pointer to a string which is a copy of the
+     * given string
+     */
+    char* allocate_and_copy(const char* str,int size);
 
 };
 
