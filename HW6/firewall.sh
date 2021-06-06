@@ -16,7 +16,11 @@ output=""
 			#check packets
 			
 			#uses the filters ont the packets
-			packs_out_rules_new=`echo "$pack_in" | ./firewall.exe "${filters[0]}" | ./firewall.exe "${filters[1]}" | ./firewall.exe "${filters[2]}" | ./firewall.exe "${filters[3]}"`
+			packs_out_rules_new=`echo "$pack_in" | \
+			./firewall.exe "${filters[0]}" | \
+			./firewall.exe "${filters[1]}" | \
+			./firewall.exe "${filters[2]}" | \
+			./firewall.exe "${filters[3]}"`
 			#create output
 			#add the passed packets to output
 			output+=`echo "${packs_out_rules_new}" | sed '/^$/d' | sort -u `
