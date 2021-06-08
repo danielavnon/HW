@@ -1,5 +1,6 @@
 #include "string.h"
 #include "ip.h"
+#include <cstring>
 
 #define NULL_SIGN '\0'
 #define SPACE_SIGN ' '
@@ -27,8 +28,15 @@ String::String(const String &str){
 }
 
 String::String(const char *str){
+	if (str == NULL){
+		data = new char[1];
+		data[0] = NULL_SIGN;
+		length = 0;
+	}
+	else{
 	length = strlen(str);
 	data = allocate_and_copy(str,length);
+	}
 }
 
 String::~String(){
@@ -109,16 +117,16 @@ void String::split(const char *delimiters, String **output, size_t *size) const{
 	}
 
 	*output = new String[substrings_count];
-	int j=0;
+	//int j=0;
 	for (i = 0; i < len+1; i++){
 
 		if(data_clone[i]==NULL_SIGN && i>0 && data_clone[i-1]!=NULL_SIGN){
 			(*output)[i_substring]=String(&data_clone[start]);
-			j=i;
-			while(data_clone[j]==NULL_SIGN){
-				j++;
-			}
-			start=j;
+			//j=i;
+			//while(data_clone[j]==NULL_SIGN){
+			//	j++;
+			//}
+			//start=j;
 			i_substring++;
 			start = i + 1;
 		}
@@ -165,3 +173,4 @@ char* allocate_and_copy(const char* str,int size){
 	}
 	else return strcpy(new char[size+1],str);
 }
+
